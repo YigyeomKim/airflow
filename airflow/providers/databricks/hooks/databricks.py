@@ -40,6 +40,8 @@ RESTART_CLUSTER_ENDPOINT = ("POST", "api/2.0/clusters/restart")
 START_CLUSTER_ENDPOINT = ("POST", "api/2.0/clusters/start")
 TERMINATE_CLUSTER_ENDPOINT = ("POST", "api/2.0/clusters/delete")
 
+GET_JOB_ENDPOINT = ("GET", "api/2.0/jobs/get")
+
 CREATE_ENDPOINT = ("POST", "api/2.1/jobs/create")
 RESET_ENDPOINT = ("POST", "api/2.1/jobs/reset")
 RUN_NOW_ENDPOINT = ("POST", "api/2.1/jobs/run-now")
@@ -386,6 +388,17 @@ class DatabricksHook(BaseDatabricksHook):
         json = {"run_id": run_id}
         response = self._do_api_call(GET_RUN_ENDPOINT, json)
         return response["job_id"]
+
+    def get_job_name(self, job_id: int) -> str:
+        """
+        Retrieve job_name.
+
+        :param job_id (int): id of the job
+        :returns: str: name of the job
+        """
+        payload = {"job_id": job_id}
+        response = self._do_api_call(GET_JOB_ENDPOINT, payload)
+        return response["settings"]["name"]
 
     def get_run_state(self, run_id: int) -> RunState:
         """
