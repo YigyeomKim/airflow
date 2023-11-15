@@ -389,6 +389,17 @@ class DatabricksHook(BaseDatabricksHook):
         response = self._do_api_call(GET_RUN_ENDPOINT, json)
         return response["job_id"]
 
+    def get_job_name(self, job_id: int) -> str:
+        """
+        Retrieve job_name.
+
+        :param job_id (int): id of the job
+        :returns: str: name of the job
+        """
+        payload = {"job_id": job_id}
+        response = self._do_api_call(GET_JOB_ENDPOINT, payload)
+        return response["settings"]["name"]
+
     def get_run_state(self, run_id: int) -> RunState:
         """
         Retrieve run state of the run.
